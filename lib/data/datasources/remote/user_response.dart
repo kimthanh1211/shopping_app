@@ -20,6 +20,7 @@ class UserResponse {
     _registerDate = registerDate;
     _token = token;
 }
+//curl -H "Authorization: token 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" https://api.github.com/user
 
   UserResponse.fromJson(dynamic json) {
     _email = json['email'];
