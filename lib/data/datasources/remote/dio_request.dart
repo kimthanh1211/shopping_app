@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:shopping_app/common/constants/api_constant.dart';
+
+import '../../../common/constants/variable_constant.dart';
+import '../local/cache/app_cache.dart';
 // import 'package:flutter_appsa_22042022/common/constants/api_constant.dart';
 // import 'package:flutter_appsa_22042022/common/constants/variable_constant.dart';
 // import 'package:flutter_appsa_22042022/data/datasources/local/cache/app_cache.dart';
@@ -20,10 +23,10 @@ class DioRequest {
       _dio!.interceptors.add(LogInterceptor(requestBody: true));
       _dio!.interceptors.add(InterceptorsWrapper(
         onRequest: (options, handler) {
-          // var token = AppCache.getString(VariableConstant.TOKEN);
-          // if (token.isNotEmpty) {
-          //   options.headers["Authorization"] = "Bearer " + token;
-          // }
+          var token = AppCache.getString(VariableConstant.TOKEN);
+          if (token.isNotEmpty) {
+            options.headers["Authorization"] = "Bearer " + token;
+          }
           return handler.next(options);
         },
         onResponse: (e, handler) {

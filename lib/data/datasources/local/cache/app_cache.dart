@@ -19,8 +19,11 @@ class AppCache {
       if (value.isEmpty || key.isEmpty) return;
       _prefs?.setString(key, value);
   }
-  static void removeString({String key = "", String value = ""}) {
-      if (value.isEmpty || key.isEmpty) return;
+  static void removeString({String key = ""}) {
+      if (key.isEmpty) return;
       _prefs?.remove(key);
+  }
+  static void clearAll() {
+    _prefs?.clear();
   }
 }

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:shopping_app/common/base/base_bloc.dart';
 import 'package:shopping_app/common/base/base_event.dart';
 import 'package:shopping_app/data/datasources/model/user_model.dart';
-import 'package:shopping_app/data/repositorys/authentication_repository.dart';
+import 'package:shopping_app/data/repositories/authentication_repository.dart';
 import 'package:shopping_app/presentations/features/sign_up/sign_up_event.dart';
 
 class SignUpBloc extends BaseBloc{

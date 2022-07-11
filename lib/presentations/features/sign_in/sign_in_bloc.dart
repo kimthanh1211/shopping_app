@@ -4,7 +4,7 @@ import 'package:shopping_app/common/base/base_event.dart';
 import 'package:shopping_app/common/constants/variable_constant.dart';
 import 'package:shopping_app/data/datasources/local/cache/app_cache.dart';
 import 'package:shopping_app/data/datasources/model/user_model.dart';
-import 'package:shopping_app/data/repositorys/authentication_repository.dart';
+import 'package:shopping_app/data/repositories/authentication_repository.dart';
 import 'package:shopping_app/presentations/features/sign_in/sign_in_event.dart';
 
 class SignInBloc extends BaseBloc{

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shopping_app/common/base/base_widget.dart';
 import 'package:shopping_app/common/widgets/loading_widget.dart';
 import 'package:shopping_app/common/widgets/progress_listener_widget.dart';
-import 'package:shopping_app/data/repositorys/authentication_repository.dart';
+import 'package:shopping_app/data/repositories/authentication_repository.dart';
 import 'package:shopping_app/presentations/features/sign_in/sign_in_bloc.dart';
 import 'package:shopping_app/presentations/features/sign_in/sign_in_event.dart';
 import 'package:provider/provider.dart';

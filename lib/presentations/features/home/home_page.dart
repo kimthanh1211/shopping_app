@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shopping_app/common/base/base_widget.dart';
-import 'package:shopping_app/data/repositorys/product_repository.dart';
+import 'package:shopping_app/data/datasources/model/cart_model.dart';
+import 'package:shopping_app/data/repositories/product_repository.dart';
 import 'package:shopping_app/presentations/features/home/home_bloc.dart';
 
 import '../../../common/constants/api_constant.dart';
 import '../../../common/widgets/loading_widget.dart';
 import '../../../data/datasources/model/product_model.dart';
+import '../../../data/repositories/cart_repository.dart';
+import 'home_event.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -31,27 +34,56 @@ class _HomePageState extends State<HomePage> {
     return PageContainer(
         providers: [
           Provider(create: (context)=>ProductRepository()),
-          ProxyProvider<ProductRepository,HomeBloc>(
-              create: (context)=>HomeBloc(),
-              update:(context,repository,bloc){
-                bloc!.setProductRepository(productRepository: repository);
+          Provider(create: (context)=>CartRepository()),
+          ProxyProvider2<ProductRepository, CartRepository,HomeBloc>(
+              create: (context) => HomeBloc(),
+              update: (context, productRepo, cartRepo, bloc) {
+                bloc!.setRepository(productRepository: productRepo, cartRepository: cartRepo);
                 return bloc;
-              }
-          )
+              })
         ],
         appBar: AppBar(
             title: Text("Home"),
             actions:[
-              InkWell(
-                onTap: (){
+              Consumer<HomeBloc>(
+                builder: (context,bloc,child){
+                  return InkWell(
+                    onTap: (){
+                      Navigator
+                          .pushNamed(context, "/cart")
+                          .then((cartModelUpdate){
+                            if (cartModelUpdate != null) {
+                              bloc.cart.sink.add(cartModelUpdate as CartModel);
+                            }
+                          });
+                    },
+                    child: StreamBuilder<CartModel>(
+                      initialData: null,
+                      stream: bloc.cart.stream,
+                      builder:(context,snapshot){
+                        if(snapshot.hasError||snapshot.data==null) return Container();
+                        String? count = snapshot.data?.products?.length.toString();
+                        if(count == null||count.isEmpty||count == "0"){
+                          return Container(
+                              margin: EdgeInsets.only(right: 10, top: 10),
+                              child: Icon(Icons.shopping_cart_outlined)
+                          );
+                        }
+                        else{
+                          return Container(
+                              margin: EdgeInsets.only(right: 10, top: 10),
+                              child: Badge(
+                                  badgeContent: Text(count),
+                                  child: Icon(Icons.shopping_cart_outlined)
+                              )
+                          );
+                        }
 
-                },
-                child: Container(
-                   child: Badge(
-                      badgeContent: Text("0"),
-                    child: Icon(Icons.shopping_cart_checkout_outlined),
-                  )
-                ),
+                      }
+                    ),
+                  );
+                }
+
               )
             ],
         )
@@ -139,7 +171,7 @@ class _HomeContainerState extends State<HomeContainer> {
                           style: TextStyle(fontSize: 12)),
                       ElevatedButton(
                         onPressed: () {
-                          //homeBloc.eventSink.add(AddCartEvent(idProduct: product.id));
+                          homeBloc.eventSink.add(AddCartEvent(idProduct: product.id));
                         },
                         style: ButtonStyle(
                             backgroundColor:
