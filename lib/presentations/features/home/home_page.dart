@@ -45,6 +45,15 @@ class _HomePageState extends State<HomePage> {
         appBar: AppBar(
             title: Text("Home"),
             actions:[
+              Container(
+                margin: EdgeInsets.only(right: 5, top: 10),
+                child: IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/order-history");
+                    },
+                    icon: Icon(Icons.description)
+                ),
+              ),
               Consumer<HomeBloc>(
                 builder: (context,bloc,child){
                   return InkWell(
@@ -71,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                         }
                         else{
                           return Container(
-                              margin: EdgeInsets.only(right: 10, top: 10),
+                              margin: EdgeInsets.only(right: 5, top: 10),
                               child: Badge(
                                   badgeContent: Text(count),
                                   child: Icon(Icons.shopping_cart_outlined)
@@ -79,12 +88,23 @@ class _HomePageState extends State<HomePage> {
                           );
                         }
 
+
+
                       }
                     ),
                   );
                 }
 
               )
+              ,Container(
+                margin: EdgeInsets.only(right: 0, top: 10),
+                child: IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/profile");
+                    },
+                    icon: Icon(Icons.account_circle)
+                ),
+              ),
             ],
         )
         , child: HomeContainer());

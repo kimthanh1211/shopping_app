@@ -39,6 +39,9 @@ class SignInBloc extends BaseBloc{
             )
         );
         AppCache.setString(key:VariableConstant.TOKEN, value:userResponse.token!);
+        AppCache.setString(key:VariableConstant.ACCOUNT_INFO
+            , value:'{\"email\":\"${userResponse.email?? ""}\",\"name\":\"${userResponse.name?? ""}\","phone":\"${userResponse.phone?? ""}\","token":\"${userResponse.token?? ""}\"}'
+        );
         progressSink.add(LoginSuccessEvent());
       }
       else message.sink.add("Data repsonse null");
