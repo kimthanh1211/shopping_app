@@ -27,7 +27,7 @@ class _SignInState extends State<SignInPage> {
             }
           )
         ],
-        appBar: AppBar(title: Text("Đăng nh"))
+        appBar: AppBar(title: Text("Đăng nhập"))
         , child: SignInContainer());
   }
 }

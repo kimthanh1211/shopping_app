@@ -45,8 +45,7 @@ class SignInBloc extends BaseBloc{
     })
     .catchError((error){
       message.sink.add(error);
-    })
-    .then((value){ loadingSink.add(false);})
+    }).whenComplete((){ loadingSink.add(false);});
     ;
   }
 

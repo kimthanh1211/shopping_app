@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/data/datasources/local/cache/app_cache.dart';
 import 'package:shopping_app/presentations/features/home/home_page.dart';
 import 'package:shopping_app/presentations/features/sign_in/sign_in_page.dart';
 import 'package:shopping_app/presentations/features/sign_up/sign_up_page.dart';
@@ -6,6 +7,7 @@ import 'package:shopping_app/presentations/features/splash/splash_page.dart';
 
 Future<void> main() async {
   runApp(const MyApp());
+  await AppCache.init();
 }
 
 class MyApp extends StatelessWidget {

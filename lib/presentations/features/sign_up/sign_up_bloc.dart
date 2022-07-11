@@ -47,7 +47,7 @@ class SignUpBloc extends BaseBloc{
       progressSink.add(SignUpSuccessEvent());
     }).catchError((error) {
       message.sink.add(error);
-    }).then((value){ loadingSink.add(false);});
+    }).whenComplete((){ loadingSink.add(false);});
   }
 
 
