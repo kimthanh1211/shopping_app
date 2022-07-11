@@ -29,7 +29,7 @@ class _SignUpPageState extends State<SignUpPage> {
           )
         ],
         appBar: AppBar(
-          title: Text("Sign Up")
+          title: Text("Đăng ký")
         ),
         child: SignUpContainer(),
     );
@@ -68,10 +68,10 @@ class _SignUpContainerState extends State<SignUpContainer> {
           child: ProgressListenerWidget<SignUpBloc>(
             callback: (event) {
               if (event is SignUpSuccessEvent) {
-                // String email = _emailController.text.toString();
-                // String password = _passController.text.toString();
-                // Navigator.pop(context,{'email': email, 'password': password});
-                // ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Sign Up Success")));
+                String email = _emailController.text.toString();
+                String password = _passController.text.toString();
+                Navigator.pop(context,{'email': email, 'password': password});
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Taọ tài khoản thành ")));
               }
             },
             child: Column(
@@ -126,7 +126,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          hintText: "Example : Mr. John",
+          hintText: "Nhập họ tên...",
           fillColor: Colors.black12,
           filled: true,
           prefixIcon: Icon(Icons.person, color: Colors.blue),
@@ -154,7 +154,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          hintText: "Example : district 1",
+          hintText: "Nhập địa chỉ...",
           fillColor: Colors.black12,
           filled: true,
           prefixIcon: Icon(Icons.map, color: Colors.blue),
@@ -182,7 +182,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          hintText: "Email : abc@gmail.com",
+          hintText: "Nhập email...",
           fillColor: Colors.black12,
           filled: true,
           prefixIcon: Icon(Icons.email, color: Colors.blue),
@@ -210,7 +210,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
         keyboardType: TextInputType.phone,
         textInputAction: TextInputAction.next,
         decoration: InputDecoration(
-          hintText: "Phone ((+84) 123 456 789)",
+          hintText: "Nhập số điện thoại...",
           fillColor: Colors.black12,
           filled: true,
           labelStyle: TextStyle(color: Colors.blue),
@@ -239,7 +239,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
         keyboardType: TextInputType.text,
         textInputAction: TextInputAction.done,
         decoration: InputDecoration(
-          hintText: "Pass word",
+          hintText: "Nhập mật khẩu...",
           fillColor: Colors.black12,
           filled: true,
           labelStyle: TextStyle(color: Colors.blue),
@@ -277,7 +277,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
                       EdgeInsets.symmetric(vertical: 5, horizontal: 100)),
                 )),
             child: ElevatedButton(
-              child: Text("Register",
+              child: Text("Đăng ký",
                   style: TextStyle(fontSize: 18, color: Colors.white)),
               onPressed: () {
                 String name = _displayNameController.text.toString();
@@ -285,7 +285,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
                 String address = _addressController.text.toString();
                 String password = _passController.text.toString();
                 String email = _emailController.text.toString();
-
+                String _showMsg = "";
                 if (name.isNotEmpty && phone.isNotEmpty && address.isNotEmpty && password.isNotEmpty && email.isNotEmpty) {
                   _bloc.eventSink.add(SignUpExecuteEvent(
                       email: email,
@@ -294,7 +294,12 @@ class _SignUpContainerState extends State<SignUpContainer> {
                       password: password,
                       address: address));
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Input empty")));
+                  if(name.isEmpty) _showMsg ="Vui lòng nhập họ tên";
+                  else if(address.isEmpty) _showMsg ="Vui lòng nhập địa chỉ";
+                  else if(email.isEmpty) _showMsg ="Vui lòng nhập email";
+                  else if(phone.isEmpty) _showMsg ="Vui lòng nhập số điện thoại";
+                  else if(password.isEmpty) _showMsg ="Vui lòng nhập mật khẩu";
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_showMsg)));
                   return;
                 }
               },

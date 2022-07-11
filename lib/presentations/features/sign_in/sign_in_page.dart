@@ -27,7 +27,7 @@ class _SignInState extends State<SignInPage> {
             }
           )
         ],
-        appBar: AppBar(title: Text("Sign In"))
+        appBar: AppBar(title: Text("Đăng nh"))
         , child: SignInContainer());
   }
 }
@@ -63,6 +63,9 @@ class _SignInContainerState extends State<SignInContainer> {
               child: ProgressListenerWidget<SignInBloc>(
                 callback: (event){
                   print(event.runtimeType);
+                  if(event is LoginSuccessEvent){
+                    Navigator.pushReplacementNamed(context, "/home");
+                  }
                 },
                 child: Column(
                   children: [
@@ -99,7 +102,7 @@ class _SignInContainerState extends State<SignInContainer> {
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Don't have an account!"),
+            Text("Bạn chưa có tài khoản! "),
             InkWell(
               onTap: () {
                 Navigator
@@ -113,7 +116,7 @@ class _SignInContainerState extends State<SignInContainer> {
                         }
                     });
               },
-              child: Text("Sign Up",
+              child: Text("Đăng ký ngay",
                   style: TextStyle(
                       color: Colors.red, decoration: TextDecoration.underline)),
             )
@@ -205,7 +208,7 @@ class _SignInContainerState extends State<SignInContainer> {
                 String _showMsg = "";
                 if (email.isEmpty || password.isEmpty) {
                   if(email.isEmpty) _showMsg ="Vui lòng nhập email";
-                  else if(password.isEmpty) _showMsg ="Vui lòng nhập mật ";
+                  else if(password.isEmpty) _showMsg ="Vui lòng nhập mật khẩu";
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_showMsg,style: TextStyle(color:Colors.red),)));
                   return;
                 }

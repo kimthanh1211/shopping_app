@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/presentations/features/home/home_page.dart';
 import 'package:shopping_app/presentations/features/sign_in/sign_in_page.dart';
 import 'package:shopping_app/presentations/features/sign_up/sign_up_page.dart';
+import 'package:shopping_app/presentations/features/splash/splash_page.dart';
 
-void main() {
+Future<void> main() async {
   runApp(const MyApp());
 }
 
@@ -21,8 +23,10 @@ class MyApp extends StatelessWidget {
       routes: {
         "/sign-in": (context) => SignInPage(),
         "/sign-up": (context) => SignUpPage(),
+        "/home": (context) => HomePage(),
+        "/": (context) => SplashPage(),
       },
-      initialRoute: "/sign-in",
+      initialRoute: "/",
     );
   }
 }

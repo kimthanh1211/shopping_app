@@ -26,6 +26,7 @@ class SignUpBloc extends BaseBloc{
   void dispose() {
     super.dispose();
     userModelController.close();
+    message.close();
   }
 
   void _executeSignUp(SignUpExecuteEvent event){
