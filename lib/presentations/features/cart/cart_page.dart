@@ -25,7 +25,7 @@ class CartPage extends StatelessWidget {
             })
       ],
       appBar: AppBar(
-        title: Text("Cart"),
+        title: Text("Giỏ hàng"),
       ),
       child: CartContainer(),
     );
@@ -107,7 +107,7 @@ class _CartContainerState extends State<CartContainer> {
                           style: ButtonStyle(
                               backgroundColor:
                               MaterialStateProperty.all(Colors.deepOrange)),
-                          child: Text("Confirm",
+                          child: Text("Đặt hàng",
                               style: TextStyle(color: Colors.white, fontSize: 25)),
                         )),
                   ],

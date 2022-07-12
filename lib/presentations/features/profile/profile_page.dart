@@ -36,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
             }
         )
       ],
-      appBar: AppBar(title: Text("Account")),
+      appBar: AppBar(title: Text("Thông tin tài khoản")),
       child: ProfilePageContainer(),
     );
   }
@@ -90,7 +90,7 @@ class _ProfilePageContainerState extends State<ProfilePageContainer> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Name",
+                                "Tên:",
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,
@@ -176,7 +176,7 @@ class _ProfilePageContainerState extends State<ProfilePageContainer> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Phone",
+                                "Số điện thoại",
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w500,

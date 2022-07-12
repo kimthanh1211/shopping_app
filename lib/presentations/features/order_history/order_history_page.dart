@@ -29,7 +29,7 @@ class OrderHistoryPage extends StatelessWidget {
         )
       ],
       appBar: AppBar(
-        title: Text("Order History"),
+        title: Text("Lịch sử đơn hàng"),
       ),
       child: OrderHistoryContainer(),
     );

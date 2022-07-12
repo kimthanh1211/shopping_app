@@ -11,6 +11,7 @@ import '../../../common/constants/api_constant.dart';
 import '../../../common/widgets/loading_widget.dart';
 import '../../../data/datasources/model/product_model.dart';
 import '../../../data/repositories/cart_repository.dart';
+import '../product_detail/product_detail_page.dart';
 import 'home_event.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -43,7 +44,7 @@ class _HomePageState extends State<HomePage> {
               })
         ],
         appBar: AppBar(
-            title: Text("Home"),
+            title: Text("Trang chủ"),
             actions:[
               Container(
                 margin: EdgeInsets.only(right: 5, top: 10),
@@ -186,25 +187,57 @@ class _HomeContainerState extends State<HomeContainer> {
                                   .format(product.price) +
                               " đ",
                           style: TextStyle(fontSize: 12)),
-                      ElevatedButton(
-                        onPressed: () {
-                          homeBloc.eventSink.add(AddCartEvent(idProduct: product.id));
-                        },
-                        style: ButtonStyle(
-                            backgroundColor:
-                            MaterialStateProperty.resolveWith((states) {
-                              if (states.contains(MaterialState.pressed)) {
-                                return Color.fromARGB(200, 240, 102, 61);
-                              } else {
-                                return Color.fromARGB(230, 240, 102, 61);
-                              }
-                            }),
-                            shape: MaterialStateProperty.all(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(10))))),
-                        child:
-                        Text("Add To Cart", style: TextStyle(fontSize: 14)),
+                      Row(
+                        children:[
+                          ElevatedButton(
+                            onPressed: () {
+                              homeBloc.eventSink.add(AddCartEvent(idProduct: product.id));
+                            },
+                            style: ButtonStyle(
+                                backgroundColor:
+                                MaterialStateProperty.resolveWith((states) {
+                                  if (states.contains(MaterialState.pressed)) {
+                                    return Color.fromARGB(200, 240, 102, 61);
+                                  } else {
+                                    return Color.fromARGB(230, 240, 102, 61);
+                                  }
+                                }),
+                                shape: MaterialStateProperty.all(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))))),
+                            child:
+                            Text("Thêm vào giỏ", style: TextStyle(fontSize: 14)),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(left: 5),
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  "/product-detail",
+                                  arguments:{"product": product}
+                                );
+
+                              },
+                              style: ButtonStyle(
+                                  backgroundColor:
+                                  MaterialStateProperty.resolveWith((states) {
+                                    if (states.contains(MaterialState.pressed)) {
+                                      return Color.fromARGB(200, 11, 22, 142);
+                                    } else {
+                                      return Color.fromARGB(230, 11, 22, 142);
+                                    }
+                                  }),
+                                  shape: MaterialStateProperty.all(
+                                      RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10))))),
+                              child:
+                              Text("Chi tiết", style: TextStyle(fontSize: 14)),
+                            ),
+                          ),
+                        ]
                       ),
                     ],
                   ),

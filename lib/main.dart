@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/data/datasources/local/cache/app_cache.dart';
 import 'package:shopping_app/presentations/features/order_history/order_history_page.dart';
+import 'package:shopping_app/presentations/features/product_detail/product_detail_page.dart';
 import 'package:shopping_app/presentations/features/profile/profile_page.dart';
 import 'package:shopping_app/presentations/features/cart/cart_page.dart';
 import 'package:shopping_app/presentations/features/home/home_page.dart';
@@ -30,6 +31,7 @@ class MyApp extends StatelessWidget {
         "/sign-up": (context) => SignUpPage(),
         "/profile": (context) => ProfilePage(),
         "/home": (context) => HomePage(),
+        "/product-detail": (context) => ProductDetailPage(),
         "/cart": (context) => CartPage(),
         "/order-history": (context) => OrderHistoryPage(),
         "/": (context) => SplashPage(),
