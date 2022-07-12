@@ -8,6 +8,6 @@ class ApiConstant {
   static final String CART_UPDATE_API = "cart/update";
   static final String CART_CONFORM_API = "cart/conform";
   static final String ADD_CART_API = "cart/add";
-
+  static final String ORDER_HISTORY_API = "order/history";
 
 }

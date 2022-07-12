@@ -87,9 +87,6 @@ class _HomePageState extends State<HomePage> {
                               )
                           );
                         }
-
-
-
                       }
                     ),
                   );
@@ -127,7 +124,7 @@ class _HomeContainerState extends State<HomeContainer> {
     super.didChangeDependencies();
     homeBloc = context.read();
     homeBloc.fetchProducts();
-    // homeBloc.fetchCart();
+    homeBloc.fetchCart();
   }
 
   @override

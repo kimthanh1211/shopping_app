@@ -103,6 +103,9 @@ class HomeBloc extends BaseBloc{
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+    products.close();
+    message.close();
+    cart.close();
   }
 
 
