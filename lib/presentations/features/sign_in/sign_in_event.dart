@@ -14,7 +14,6 @@ class LoginEvent extends SignInEvent{
 }
 
 class LoginSuccessEvent extends SignInEvent{
-  late String email,password;
 
   LoginSuccessEvent();
 

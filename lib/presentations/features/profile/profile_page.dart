@@ -72,7 +72,8 @@ class _ProfilePageContainerState extends State<ProfilePageContainer> {
           callback: (event){
             print(event.runtimeType);
             if(event is SignOutSuccessEvent){
-              Navigator.pushReplacementNamed(context, "/sign-in");
+              //Navigator.pushReplacementNamed(context, "/sign-in");
+              Navigator.pushReplacementNamed(context, "/home");
             }
           },
           child: Column(

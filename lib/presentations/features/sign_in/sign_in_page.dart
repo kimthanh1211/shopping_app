@@ -65,6 +65,7 @@ class _SignInContainerState extends State<SignInContainer> {
                   print(event.runtimeType);
                   if(event is LoginSuccessEvent){
                     Navigator.pushReplacementNamed(context, "/home");
+                    //Navigator.pop(context,true);
                   }
                 },
                 child: Column(

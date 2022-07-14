@@ -48,34 +48,9 @@ class ProductDetailBloc extends BaseBloc{
           loadingSink.add(false);
         });
       }
-      // else if(event.qty > 1){
-      //   for(int i = 0; i< event.qty; i++){
-      //     Future.delayed(const Duration(seconds: 5), () {
-      //       _cartRepository
-      //           .addCart(event.idProduct)
-      //           .then((cartData) => cart.sink.add(CartModel(
-      //           cartData.id,
-      //           cartData.products?.map((model) => ProductModel(
-      //               model.id,
-      //               model.name,
-      //               model.address,
-      //               model.price,
-      //               model.img,
-      //               model.quantity,
-      //               model.gallery))
-      //               .toList(),
-      //           cartData.price)))
-      //           .catchError((e) {
-      //         message.sink.add(e);
-      //       }).whenComplete(() {
-      //         if(i == event.qty - 1){
-      //           progressSink.add(AddCartByQtySuccessEvent());
-      //           loadingSink.add(false);
-      //         }
-      //       });
-      //     });
-      //   }
-      // }
+      else if(event.qty > 1){
+        //add product to card width qty
+      }
 
 
     }

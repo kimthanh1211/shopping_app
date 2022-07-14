@@ -8,8 +8,10 @@ import 'package:shopping_app/presentations/features/product_detail/product_detai
 
 import '../../../common/base/base_widget.dart';
 import '../../../common/constants/api_constant.dart';
+import '../../../common/constants/variable_constant.dart';
 import '../../../common/widgets/loading_widget.dart';
 import '../../../common/widgets/progress_listener_widget.dart';
+import '../../../data/datasources/local/cache/app_cache.dart';
 import '../../../data/datasources/model/product_model.dart';
 import '../../../data/repositories/cart_repository.dart';
 
@@ -188,7 +190,12 @@ class _DetailProductDetailContainerState extends State<DetailProductDetailContai
                 padding: EdgeInsets.only(top:20),
                 child: ElevatedButton(
                   onPressed: () {
-                    productDetailBloc.eventSink.add(AddCartByQtyEvent(idProduct: product.id,qty:initValue));
+                    String token = AppCache.getString(VariableConstant.TOKEN);
+                    if(token.isNotEmpty)
+                      productDetailBloc.eventSink.add(AddCartByQtyEvent(idProduct: product.id,qty:initValue));
+                    else
+                      Navigator.pushNamed(context, "/sign-in");
+
                   },
                   style: ButtonStyle(
                       backgroundColor:

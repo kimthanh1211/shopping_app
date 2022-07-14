@@ -8,7 +8,9 @@ import 'package:shopping_app/data/repositories/product_repository.dart';
 import 'package:shopping_app/presentations/features/home/home_bloc.dart';
 
 import '../../../common/constants/api_constant.dart';
+import '../../../common/constants/variable_constant.dart';
 import '../../../common/widgets/loading_widget.dart';
+import '../../../data/datasources/local/cache/app_cache.dart';
 import '../../../data/datasources/model/product_model.dart';
 import '../../../data/repositories/cart_repository.dart';
 import '../product_detail/product_detail_page.dart';
@@ -26,48 +28,50 @@ class _HomePageState extends State<HomePage> {
     super.didChangeDependencies();
     ProductRepository repository = ProductRepository();
     repository.fetchListProducts().then((value) => print(value)).catchError((e)=> print(e));
-
   }
 
 
   @override
   Widget build(BuildContext context) {
-    return PageContainer(
-        providers: [
-          Provider(create: (context)=>ProductRepository()),
-          Provider(create: (context)=>CartRepository()),
-          ProxyProvider2<ProductRepository, CartRepository,HomeBloc>(
-              create: (context) => HomeBloc(),
-              update: (context, productRepo, cartRepo, bloc) {
-                bloc!.setRepository(productRepository: productRepo, cartRepository: cartRepo);
-                return bloc;
-              })
-        ],
-        appBar: AppBar(
-            title: Text("Trang chủ"),
-            actions:[
-              Container(
-                margin: EdgeInsets.only(right: 5, top: 10),
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/order-history");
-                    },
-                    icon: Icon(Icons.description)
-                ),
-              ),
-              Consumer<HomeBloc>(
-                builder: (context,bloc,child){
-                  return InkWell(
-                    onTap: (){
-                      Navigator
-                          .pushNamed(context, "/cart")
-                          .then((cartModelUpdate){
-                            if (cartModelUpdate != null) {
-                              bloc.cart.sink.add(cartModelUpdate as CartModel);
-                            }
-                          });
-                    },
-                    child: StreamBuilder<CartModel>(
+    List<Widget>? _innerAppbarAction(){
+      String token = AppCache.getString(VariableConstant.TOKEN);
+      if (token.isEmpty){
+        return [
+          Container(
+            margin: EdgeInsets.only(right: 0, top: 10),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, "/sign-in");
+                },
+                icon: Icon(Icons.account_circle)
+            ),
+          ),
+        ];
+      }
+      else{
+        return [
+          Container(
+            margin: EdgeInsets.only(right: 5, top: 10),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, "/order-history");
+                },
+                icon: Icon(Icons.description)
+            ),
+          ),
+          Consumer<HomeBloc>(
+              builder: (context,bloc,child){
+                return InkWell(
+                  onTap: (){
+                    Navigator
+                        .pushNamed(context, "/cart")
+                        .then((cartModelUpdate){
+                      if (cartModelUpdate != null) {
+                        bloc.cart.sink.add(cartModelUpdate as CartModel);
+                      }
+                    });
+                  },
+                  child: StreamBuilder<CartModel>(
                       initialData: null,
                       stream: bloc.cart.stream,
                       builder:(context,snapshot){
@@ -89,21 +93,39 @@ class _HomePageState extends State<HomePage> {
                           );
                         }
                       }
-                    ),
-                  );
-                }
+                  ),
+                );
+              }
 
-              )
-              ,Container(
-                margin: EdgeInsets.only(right: 0, top: 10),
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/profile");
-                    },
-                    icon: Icon(Icons.account_circle)
-                ),
-              ),
-            ],
+          )
+          ,Container(
+            margin: EdgeInsets.only(right: 0, top: 10),
+            child: IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, "/profile");
+                },
+                icon: Icon(Icons.account_circle)
+            ),
+          ),
+        ];
+      }
+
+    }
+
+    return PageContainer(
+        providers: [
+          Provider(create: (context)=>ProductRepository()),
+          Provider(create: (context)=>CartRepository()),
+          ProxyProvider2<ProductRepository, CartRepository,HomeBloc>(
+              create: (context) => HomeBloc(),
+              update: (context, productRepo, cartRepo, bloc) {
+                bloc!.setRepository(productRepository: productRepo, cartRepository: cartRepo);
+                return bloc;
+              })
+        ],
+        appBar: AppBar(
+            title: Text("Trang chủ"),
+            actions:_innerAppbarAction()
         )
         , child: HomeContainer());
   }
@@ -191,7 +213,11 @@ class _HomeContainerState extends State<HomeContainer> {
                         children:[
                           ElevatedButton(
                             onPressed: () {
-                              homeBloc.eventSink.add(AddCartEvent(idProduct: product.id));
+                              String token = AppCache.getString(VariableConstant.TOKEN);
+                              if(token.isNotEmpty)
+                                homeBloc.eventSink.add(AddCartEvent(idProduct: product.id));
+                              else
+                                Navigator.pushNamed(context, "/sign-in");
                             },
                             style: ButtonStyle(
                                 backgroundColor:

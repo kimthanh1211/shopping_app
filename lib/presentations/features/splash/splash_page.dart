@@ -16,11 +16,13 @@ class _SplashPageState extends State<SplashPage> {
     Future.delayed(Duration(seconds: 2),() {
       String token = AppCache.getString(VariableConstant.TOKEN);
       print("token: $token");
-      if (token.isNotEmpty) {
+      //if (token.isNotEmpty)
+      {
         Navigator.pushReplacementNamed(context, '/home');
-      } else {
-        Navigator.pushReplacementNamed(context, '/sign-in');
       }
+      //else{
+        //Navigator.pushReplacementNamed(context, '/sign-in');
+      //}
     });
   }
 
