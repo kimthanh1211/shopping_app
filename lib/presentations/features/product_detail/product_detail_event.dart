@@ -21,3 +21,30 @@ class AddCartByQtySuccessEvent extends ProductDetailEvent{
   List<Object> get props =>[];
 
 }
+
+class PushRatingEvent extends ProductDetailEvent{
+  String productId;
+  Map<String,Object> value;
+  PushRatingEvent({required this.productId,required this.value});
+
+  @override
+  List<Object> get props =>[];
+
+}
+class ListenerRatingEvent extends ProductDetailEvent{
+  String productId;
+  ListenerRatingEvent({required this.productId});
+
+  @override
+  List<Object> get props =>[];
+
+}
+
+class GetRatingEvent extends ProductDetailEvent{
+  String productId;
+  GetRatingEvent({required this.productId});
+
+  @override
+  List<Object> get props =>[];
+
+}

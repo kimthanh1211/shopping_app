@@ -71,11 +71,11 @@ class _SignInContainerState extends State<SignInContainer> {
                 child: Column(
                   children: [
                     Expanded(
-                        flex: 2
-                        ,child: Image.asset("assets/images/ic_hello_food.png")
+                        flex: 4
+                        ,child: Image.asset("assets/images/logo.png")
                     ),
                     Expanded(
-                        flex: 4
+                        flex: 2
                         ,child: Container(
                           child:Column(
                             mainAxisAlignment: MainAxisAlignment.center,

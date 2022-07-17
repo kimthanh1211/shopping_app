@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -11,10 +12,12 @@ import '../../../common/constants/api_constant.dart';
 import '../../../common/constants/variable_constant.dart';
 import '../../../common/widgets/loading_widget.dart';
 import '../../../data/datasources/local/cache/app_cache.dart';
+import '../../../data/datasources/local/firebase/database/firebase_db.dart';
 import '../../../data/datasources/model/product_model.dart';
 import '../../../data/repositories/cart_repository.dart';
 import '../product_detail/product_detail_page.dart';
 import 'home_event.dart';
+import 'dart:math';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -173,7 +176,19 @@ class _HomeContainerState extends State<HomeContainer> {
     );
   }
 
+  Future<void> _getDataFromFireBaseDB() async {
+    // final ref = FirebaseDatabase.instance.ref();
+    // final snapshot = await ref.child('test/').get();
+    // if (snapshot.exists) {
+    //   print(snapshot.value);
+    // } else {
+    //   print('No data available.');
+    // }
+  }
+
+
   Widget _buildItemFood(ProductModel? product) {
+    _getDataFromFireBaseDB();
     if (product == null) return Container();
     return Container(
       height: 135,
@@ -213,6 +228,9 @@ class _HomeContainerState extends State<HomeContainer> {
                         children:[
                           ElevatedButton(
                             onPressed: () {
+                              // String strTest = "test db ${Random().nextInt(100)}";
+                              // print(strTest);
+                              // FireBaseDataBaseClass.setDataFromFireBaseDB("test123@",strTest);
                               String token = AppCache.getString(VariableConstant.TOKEN);
                               if(token.isNotEmpty)
                                 homeBloc.eventSink.add(AddCartEvent(idProduct: product.id));
@@ -244,7 +262,6 @@ class _HomeContainerState extends State<HomeContainer> {
                                   "/product-detail",
                                   arguments:{"product": product}
                                 );
-
                               },
                               style: ButtonStyle(
                                   backgroundColor:

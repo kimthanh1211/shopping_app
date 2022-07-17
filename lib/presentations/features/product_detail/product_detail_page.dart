@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -12,8 +13,13 @@ import '../../../common/constants/variable_constant.dart';
 import '../../../common/widgets/loading_widget.dart';
 import '../../../common/widgets/progress_listener_widget.dart';
 import '../../../data/datasources/local/cache/app_cache.dart';
+import '../../../data/datasources/local/firebase/database/firebase_db.dart';
 import '../../../data/datasources/model/product_model.dart';
+import '../../../data/datasources/model/rating_model.dart';
 import '../../../data/repositories/cart_repository.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+
+import '../../../data/repositories/rating_repository.dart';
 
 class ProductDetailPage extends StatefulWidget {
   const ProductDetailPage({Key? key}) : super(key: key);
@@ -29,10 +35,11 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
     return PageContainer(
         providers: [
           Provider(create: (context)=>CartRepository()),
-          ProxyProvider<CartRepository,ProductDetailBloc>(
+          Provider(create: (context)=>RatingRepository()),
+          ProxyProvider2<CartRepository,RatingRepository,ProductDetailBloc>(
               create: (context)=>ProductDetailBloc(),
-              update:(context,repository,bloc){
-                bloc!.setRepository(cartRepository: repository);
+              update:(context,cartRepository,ratingRepository,bloc){
+                bloc!.setRepository(cartRepository: cartRepository,ratingRepository:ratingRepository);
                 return bloc;
               }
           )
@@ -58,18 +65,20 @@ class _DetailProductDetailContainerState extends State<DetailProductDetailContai
   PageController? _pageController;
   int activePage = 1;
   //final _controller = TextEditingController();
-  final _streamController = StreamController<int>();
+  //final _streamController = StreamController<int>();
   //Stream<int> get _stream => _streamController.stream;
-  Sink<int> get _sink => _streamController.sink;
+  //Sink<int> get _sink => _streamController.sink;
   int initValue = 1;
+  bool flagIsRelating = false;
 
+  final _previewController = TextEditingController();
   late ProductDetailBloc productDetailBloc;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController(viewportFraction: 0.8,initialPage: 1);
-    _sink.add(initValue);
+    //_sink.add(initValue);
     //_stream.listen((event) => _controller.text = event.toString());
   }
   @override
@@ -77,10 +86,11 @@ class _DetailProductDetailContainerState extends State<DetailProductDetailContai
     super.didChangeDependencies();
     var dataReceive = ModalRoute.of(context)?.settings.arguments as Map;
     productModel =dataReceive["product"];
-
     productDetailBloc= context.read();
-
+    //productDetailBloc.eventSink.add(ListenerRatingEvent(productId: productModel!.id));
+    productDetailBloc.eventSink.add(GetRatingEvent(productId: productModel!.id));
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -94,15 +104,32 @@ class _DetailProductDetailContainerState extends State<DetailProductDetailContai
               Navigator.pushNamed(context, "/cart");
             }
           },
-          child: _contentProductDetail(),
+          child: StreamBuilder<List<RatingModel>>(
+              initialData: null,
+              stream: productDetailBloc.listRating.stream,
+              builder:(context, snapshot){
+                print("test snapshot.data${snapshot.data}");
+                 if (snapshot.hasError) {
+                   return Center(
+                     child: Text("Data is error"),
+                   );
+                 }
+                 // if (snapshot.data == null || snapshot.data!.isEmpty) {
+                 //   return Center(
+                 //     child: Text("Data is empty"),
+                 //   );
+                 // }
+                 return _contentProductDetail(snapshot.data??[]);
+              }
+          ),
         ),
       ),
     );
   }
-  Widget _contentProductDetail(){
+  Widget _contentProductDetail(List<RatingModel> snapshot){
     ProductModel? product= productModel;
     if(product == null ) return Container();
-    return Container(
+    return SingleChildScrollView(
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children:[
@@ -208,12 +235,179 @@ class _DetailProductDetailContainerState extends State<DetailProductDetailContai
             Divider(),
             Padding(
               padding: EdgeInsets.all(10),
-              child: Text("Chi tiết sản phẩm",style: TextStyle(fontSize: 16)),
-            )
+              child: Text("Chi tiết sản phẩm...",style: TextStyle(fontSize: 16)),
+            ),
+            Divider(),
+            _innerRating(),
+            Divider(),
+            _innerListRate(snapshot),
           ]
       ),
     );
   }
+
+  Widget _innerListRate(List<RatingModel> listRating){
+    if(listRating.length>0){
+      return Column(
+          children: [ 
+            Padding(
+                padding: EdgeInsets.all(10),
+                child:Text(
+                    "Danh sách đánh giá",
+                    style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold)),
+            ),
+            ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              itemCount: listRating.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  elevation: 5,
+                  shadowColor: Colors.blueGrey,
+                  child: Container(
+                    padding: EdgeInsets.only(top: 5, bottom: 5),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 5),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                    "${listRating[index].accountId ?? ""}",
+                                    style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold)),
+                                Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: listRatingResult(listRating[index].rate?.toInt()??0)
+                                ),
+                                Text(
+                                    "${listRating[index].createTime ?? ""}",
+                                    style: TextStyle(fontSize: 14)),
+                                Text(
+                                    "${listRating[index].preview ?? ""}",
+                                    style: TextStyle(fontSize: 14)),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }
+          )
+          ]
+      );
+    }
+    else return Container();
+  }
+
+  Widget _innerRating(){
+    double _ratingValue = 3;
+
+    if(!flagIsRelating)
+      return Column(
+        children: [
+          const Text(
+            'Đánh giá sản phẩm?',
+            style: TextStyle(fontSize: 24),
+          ),
+          const SizedBox(height: 25),
+          // implement the rating bar
+          RatingBar(
+            initialRating: _ratingValue as double,
+            direction: Axis.horizontal,
+            //allowHalfRating: true,
+            allowHalfRating: false,
+            itemCount: 5,
+            ratingWidget: RatingWidget(
+            full: const Icon(Icons.star, color: Colors.orange),
+            half: const Icon(
+            Icons.star_half,
+            color: Colors.orange,
+          ),
+          empty: const Icon(
+            Icons.star_outline,
+            color: Colors.orange,
+          )),
+          onRatingUpdate: (value) {
+            // setState(() {
+            //
+            // });
+            _ratingValue = value;
+        }),
+        const SizedBox(height: 25),
+        Container(
+          margin: EdgeInsets.only(left: 10, right: 10),
+          child: TextField(
+            maxLines: 3,
+            controller: _previewController,
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.next,
+            decoration: InputDecoration(
+            fillColor: Colors.black12,
+            filled: true,
+            hintText: "Nhập nội dung đánh giá...",
+            labelStyle: TextStyle(color: Colors.blue),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: BorderSide(width: 0, color: Colors.black12)),
+              focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: BorderSide(width: 0, color: Colors.black12)),
+              enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(5),
+              borderSide: BorderSide(width: 0, color: Colors.black12)),
+              //prefixIcon: Icon(Icons.email, color: Colors.blue),
+            ),
+          ),
+        ),
+        ElevatedButton(
+          child: Text("Đánh giá",
+          style: TextStyle(fontSize: 18, color: Colors.white)),
+          onPressed: () {
+            String _preview = _previewController.text.toString();
+            String strAccountInfo,_accountEmail;
+            strAccountInfo = AppCache.getString(VariableConstant.ACCOUNT_INFO);
+            Map<String, dynamic> user = jsonDecode(strAccountInfo);
+            _accountEmail=user['email'];
+            // RatingModel rateModel = RatingModel(
+            //     _accountEmail
+            //     , _preview
+            //     , _ratingValue
+            //     , DateTime.now()
+            // );
+            // List<RatingModel> listRating = [];
+            // listRating.add(rateModel);
+            Map<String,Object> value = {
+              "accountId":_accountEmail,
+              "preview":_preview,
+              "rate":_ratingValue,
+              "createTime":DateTime.now().toString(),
+            };
+            //print(value);
+            productDetailBloc.eventSink.add(PushRatingEvent(productId: productModel!.id,value:value));
+            flagIsRelating =true;
+            return;
+          }
+        ),
+        ],
+    );
+    else return Text("Bạn đã đánh giá sản phẩm thành công!",style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold,fontSize: 20),);
+  }
+
+  List<Widget> listRatingResult(rate) {
+    return List<Widget>.generate(rate, (index) {
+      return Icon(
+        Icons.star,
+        color: Colors.orange,
+        size: 20.0,
+      );
+    });
+  }
+
 
   List<Widget> indicators(imagesLength,currentIndex) {
     return List<Widget>.generate(imagesLength, (index) {

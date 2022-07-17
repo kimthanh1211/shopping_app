@@ -78,7 +78,7 @@ class _SignUpContainerState extends State<SignUpContainer> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Expanded(
-                    flex: 2, child: Image.asset("assets/images/ic_hello_food.png")),
+                    flex: 2, child: Image.asset("assets/images/logo.png")),
                 Expanded(
                     flex: 4,
                     child: LayoutBuilder(

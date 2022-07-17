@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "916353979867",
+    "project_id": "plugin-chat-a2f14",
+    "storage_bucket": "plugin-chat-a2f14.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:916353979867:android:c38b3f5317ae252fd783fe",
+        "android_client_info": {
+          "package_name": "com.example.shopping_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "916353979867-cfqins1jq3mm7kqppaedadskbeief714.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shopping_app",
+            "certificate_hash": "0197742bb1a364de27a8db97133252f21170af02"
+          }
+        },
+        {
+          "client_id": "916353979867-laeip1j83utbd7ihceca12d3hnfocuaa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAktHXGyPDVDiL-dkEq1go1Rdkr-uDvzLo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "916353979867-laeip1j83utbd7ihceca12d3hnfocuaa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

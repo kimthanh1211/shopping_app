@@ -7,6 +7,8 @@ import 'package:shopping_app/data/datasources/model/user_model.dart';
 import 'package:shopping_app/data/repositories/authentication_repository.dart';
 import 'package:shopping_app/presentations/features/sign_in/sign_in_event.dart';
 
+import '../../../data/datasources/local/firebase/database/firebase_db.dart';
+
 class SignInBloc extends BaseBloc{
   StreamController<UserModel> userModelController = StreamController();
   StreamController<String> message = StreamController();
@@ -43,6 +45,8 @@ class SignInBloc extends BaseBloc{
             , value:'{\"email\":\"${userResponse.email?? ""}\",\"name\":\"${userResponse.name?? ""}\","phone":\"${userResponse.phone?? ""}\","token":\"${userResponse.token?? ""}\"}'
         );
         progressSink.add(LoginSuccessEvent());
+        // if(userResponse.email !=null && userResponse.email!.isNotEmpty)
+        //   FireBaseDataBaseClass.setDataFromFireBaseDB("account/",'{\"email\":\"${userResponse.email?? ""}\",\"name\":\"${userResponse.name?? ""}\","phone":\"${userResponse.phone?? ""}\","token":\"${userResponse.token?? ""}\"}');
       }
       else message.sink.add("Data repsonse null");
     })

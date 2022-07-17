@@ -42,7 +42,12 @@ class OrderHistoryBloc extends BaseBloc {
             order.price,
             order.status,
             order.date_created);
-      }).toList());
+        }).toList()
+        ..sort((b, a) => a.date_created!.compareTo(b.date_created!)) // (a,b): asc , (b,a): desc
+      );
+
+
+
     }).catchError((e) {
       message.sink.add(e);
     }).whenComplete(() => loadingSink.add(false));
