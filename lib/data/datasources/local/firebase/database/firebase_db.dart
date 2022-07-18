@@ -10,6 +10,9 @@ class FireBaseDataBaseClass {
   static String getRatingProductPath({required String productId}) {
     return "rating_product/${productId}/";
   }
+  static String getAccountPath({required String email}) {
+    return "account_list/${email.split("@")[0]}";
+  }
 
 
 

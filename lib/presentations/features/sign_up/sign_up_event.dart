@@ -16,7 +16,7 @@ class SignUpExecuteEvent extends SignUpEvent{
 
   @override
   // TODO: implement props
-  List<Object?> get props => throw UnimplementedError();
+  List<Object?> get props => [];
 }
 
 class SignUpSuccessEvent extends SignUpEvent{

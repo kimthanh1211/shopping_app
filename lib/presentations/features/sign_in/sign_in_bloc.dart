@@ -45,8 +45,16 @@ class SignInBloc extends BaseBloc{
             , value:'{\"email\":\"${userResponse.email?? ""}\",\"name\":\"${userResponse.name?? ""}\","phone":\"${userResponse.phone?? ""}\","token":\"${userResponse.token?? ""}\"}'
         );
         progressSink.add(LoginSuccessEvent());
-        // if(userResponse.email !=null && userResponse.email!.isNotEmpty)
-        //   FireBaseDataBaseClass.setDataFromFireBaseDB("account/",'{\"email\":\"${userResponse.email?? ""}\",\"name\":\"${userResponse.name?? ""}\","phone":\"${userResponse.phone?? ""}\","token":\"${userResponse.token?? ""}\"}');
+         if(userResponse.email !=null && userResponse.email!.isNotEmpty){
+           Map<String,Object> value = {
+             "email":userResponse.email?? "",
+             "name":userResponse.name?? "",
+             "phone":userResponse.phone?? "",
+             "token":userResponse.token?? "",
+           };
+           FireBaseDataBaseClass.setDataFromFireBaseDB(path: FireBaseDataBaseClass.getAccountPath(email:userResponse.email?? ""),  value:value);
+         }
+
       }
       else message.sink.add("Data repsonse null");
     })
