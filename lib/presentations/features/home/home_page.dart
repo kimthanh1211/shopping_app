@@ -57,6 +57,15 @@ class _HomePageState extends State<HomePage> {
             margin: EdgeInsets.only(right: 5, top: 10),
             child: IconButton(
                 onPressed: () {
+                  Navigator.pushNamed(context, "/chat-list-account");
+                },
+                icon: Icon(Icons.chat)
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(right: 5, top: 10),
+            child: IconButton(
+                onPressed: () {
                   Navigator.pushNamed(context, "/order-history");
                 },
                 icon: Icon(Icons.description)

@@ -52,7 +52,8 @@ class SignInBloc extends BaseBloc{
              "phone":userResponse.phone?? "",
              "token":userResponse.token?? "",
            };
-           FireBaseDataBaseClass.setDataFromFireBaseDB(path: FireBaseDataBaseClass.getAccountPath(email:userResponse.email?? ""),  value:value);
+           String email = userResponse.email?? "";
+           FireBaseDataBaseClass.setDataFromFireBaseDB(path: "${FireBaseDataBaseClass.getAccountPath()}/${email.split("@")[0]}",  value:value);
          }
 
       }

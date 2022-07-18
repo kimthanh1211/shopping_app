@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:shopping_app/data/datasources/local/cache/app_cache.dart';
+import 'package:shopping_app/presentations/features/chat/chat_content.dart';
+import 'package:shopping_app/presentations/features/chat/chat_list_account_page.dart';
 import 'package:shopping_app/presentations/features/order_history/order_history_page.dart';
 import 'package:shopping_app/presentations/features/product_detail/product_detail_page.dart';
 import 'package:shopping_app/presentations/features/profile/profile_page.dart';
@@ -55,6 +57,8 @@ class MyApp extends StatelessWidget {
               "/product-detail": (context) => ProductDetailPage(),
               "/cart": (context) => CartPage(),
               "/order-history": (context) => OrderHistoryPage(),
+              "/chat-list-account": (context) => ChatListAccountPage(),
+              "/chat-content": (context) => ChatContentPage(),
               "/": (context) => SplashPage(),
             },
             initialRoute: "/",
